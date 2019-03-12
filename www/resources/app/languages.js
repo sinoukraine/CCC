@@ -143,14 +143,19 @@ window.LanguagePackages= {
 		"ALARM_MSG23": "Speed Alert",
 		"ALARM_MSG24": "Turn on/Turn off all",
 		"ALARM_MSG25": "Outboard Engine Removal",
-		"ALARM_MSG26": "Harsh Accelerate",
-		"ALARM_MSG27": "Harsh Braking",
-		"ALARM_MSG28": "Main Power Disconnection",
-		"ALARM_MSG29": "Speed Alert",
-		"ALARM_MSG30": "Tilt / Shock",
+		"ALARM_MSG26": "On",
+		"ALARM_MSG27": "Off",
+		"ALARM_MSG28": "Harsh Accelerate",
+		"ALARM_MSG29": "Harsh Braking",
+		"ALARM_MSG30": "Speed Alert",
+		"ALARM_MSG31": "Main Power Disconnection",
+		"ALARM_MSG32": "Tilt / Shock",
 
-
-
+		// "ALARM_MSG27": "Off",
+		// "ALARM_MSG27": "Off",
+		// "ALARM_MSG27": "Off",
+		// "ALARM_MSG27": "Off",
+		// "ALARM_MSG27": "Off",
 
 
 		"ASSET_STATUS_MSG00": "Date, time",

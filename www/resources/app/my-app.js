@@ -214,13 +214,14 @@ function backFix(event) {
 
 // Initialize your app
 var App = new Framework7({
-    swipePanel: 'left',
+    animateNavBackIcon: true,
     swipeBackPage: false,
-    material: true,
     //pushState: true,       
+    swipePanel: 'left',
     allowDuplicateUrls: true,
     sortable: false,
     modalTitle: 'CCC',
+    notificationTitle: 'CCC',
     precompileTemplates: true,
     template7Pages: true,
     onAjaxStart: function(xhr) {
@@ -237,6 +238,7 @@ var $$ = Dom7;
 // Add view
 var mainView = App.addView('.view-main', {
     domCache: true,
+    dynamicNavbar: true,
     swipeBackPage: false
 });
 
@@ -306,12 +308,14 @@ API_URL.URL_REFRESH_TOKEN = API_DOMIAN1 + "User/RefreshToken";
 
 var cameraButtons = [{
         text: 'Take picture',
+        color: 'boatwatch',
         onClick: function() {
             getImage(1);
         }
     },
     {
         text: 'From gallery',
+        color: 'boatwatch',
         onClick: function() {
             getImage(0);
         }
@@ -331,8 +335,12 @@ var html = Template7.templates.template_Login_Screen();
 $$(document.body).append(html);
 html = Template7.templates.template_Popover_Menu();
 $$(document.body).append(html);
-html = Template7.templates.template_AssetList();
-$$('.navbar-fixed').append(html);
+/*html = Template7.templates.template_AssetList();
+$$('.navbar-fixed').append(html);*/
+$$('.index-title').html(LANGUAGE.MENU_MSG00);
+$$('.index-search-input').attr('placeholder', LANGUAGE.COM_MSG06);
+$$('.index-search-cancel').html(LANGUAGE.COM_MSG04);
+$$('.index-search-nothing-found').html(LANGUAGE.COM_MSG05);
 
 
 if (inBrowser) {
@@ -365,7 +373,7 @@ var virtualAssetList = App.virtualList('.assets_list', {
             
             height = 127;
         }*/
-        var height = 88;
+        var height = 79;
         return height; //display the image with 50px height
     },
     // Display the each item using Template7 template parameter
@@ -497,17 +505,16 @@ $$('body').on('click', '.sorting_button', function(e) {
         '<div class="popover-inner">' +
         '<div class="list-block">' +
         '<ul>' +
-        '<li><a href="#" class="item-divider">' + LANGUAGE.COM_MSG41 + '</a></li>' +
-        '<li><a href="#" class="item-link list-button" onClick="sortAssetList(this);" data-sort-by="name" >' + LANGUAGE.COM_MSG42 + '</a></li>' +
-        '<li><a href="#" class="item-link list-button" onClick="sortAssetList(this);" data-sort-by="state" >' + LANGUAGE.COM_MSG43 + '</a></li>' +
+
+        '<li class="color-gray list-button-label">' + LANGUAGE.COM_MSG41 + '</li>' +
+        '<li><a href="#" class="item-link list-button color-boatwatch" onClick="sortAssetList(this);" data-sort-by="name" >' + LANGUAGE.COM_MSG42 + '</a></li>' +
+        '<li><a href="#" class="item-link list-button color-boatwatch" onClick="sortAssetList(this);" data-sort-by="state" >' + LANGUAGE.COM_MSG43 + '</a></li>' +
         '</ul>' +
         '</div>' +
         '</div>' +
         '</div>';
     App.popover(popoverHTML, clickedLink);
 });
-
-
 
 $$('body').on('click', 'a.external', function(event) {
     event.preventDefault();
@@ -555,9 +562,12 @@ $$('#menu li').on('click', function() {
                 loadPageSupport(); 
                 break;  */
         case 'menuUserManual':
+            /*showCustomMessage({
+                title: LANGUAGE.MENU_MSG12,
+                text: LANGUAGE.PROMPT_MSG053,
+            });*/
             showUserGuide();
             break;
-
         case 'menuLogout':
             App.confirm(LANGUAGE.PROMPT_MSG012, LANGUAGE.MENU_MSG04, function() {
                 logout();
@@ -566,6 +576,8 @@ $$('#menu li').on('click', function() {
 
     }
 });
+
+
 
 /*$$('body').on('click', '.navbar_title, .navbar_title_index', function(){
     var json = '{"title":"GEOLOCK WARNING","type":1024,"imei":"0000001700091735","name":"0000001700091735","lat":43.895091666666666,"lng":125.29207,"speed":0,"direct":0,"time":"2018-08-23 16:56:36"}';
@@ -1164,7 +1176,7 @@ App.onPageInit('alarms.assets', function(page) {
 
     var virtualAlarmsAssetsList = App.virtualList('.alarmsAssetList', {
         items: newAssetlist,
-        height: 88,
+        height: 44,
         searchAll: function(query, items) {
             var foundItems = [];
             for (var i = 0; i < items.length; i++) {
@@ -1186,27 +1198,41 @@ App.onPageInit('alarms.assets', function(page) {
         },*/
         renderItem: function(index, item) {
             var ret = '';
-            var assetImg = getAssetImg(item, { 'assetList': true });
+            //var assetImg = getAssetImg(item, {'assetList':true}); 
 
             ret += '<li data-index="' + index + '">';
-            ret += '<label class="label-checkbox item-content no-fastclick">';
+            ret += '<label class="label-checkbox item-content">';
             if (item.Selected) {
                 ret += '<input type="checkbox" name="alarms-assets" value="" data-id="' + item.Id + '" data-imei="' + item.IMEI + '" checked="true" >';
             } else {
                 ret += '<input type="checkbox" name="alarms-assets" value="" data-id="' + item.Id + '" data-imei="' + item.IMEI + '" >';
             }
-            //ret +=          '<input type="checkbox" name="alarms-assets" value="" data-imei="' + item.IMEI + '" data-id="' + item.Id + '">';
-            ret += '<div class="item-media">' + assetImg + '</div>';
+            ret += '<div class="item-media"><i class="icon icon-form-checkbox"></i></div>';
             ret += '<div class="item-inner">';
-            ret += '<div class="item-title-row">';
-            ret += '<div class="item-title ">' + item.Name + '</div>';
-            ret += '<div class="item-after">';
-            ret += '<i class="icon icon-form-checkbox"></i>';
-            ret += '</div>';
-            ret += '</div>';
+            ret += '<div class="item-title">' + item.Name + '</div>';
             ret += '</div>';
             ret += '</label>';
             ret += '</li>';
+
+            /*ret +=  '<li data-index="'+index+'">';
+            ret +=      '<label class="label-checkbox item-content no-fastclick">';
+                 if (item.Selected) {
+                    ret +=          '<input type="checkbox" name="alarms-assets" value="" data-id="' + item.Id + '" data-imei="' + item.IMEI + '" checked="true" >';
+                }else{
+                    ret +=          '<input type="checkbox" name="alarms-assets" value="" data-id="' + item.Id + '" data-imei="' + item.IMEI + '" >';
+                }          
+            //ret +=          '<input type="checkbox" name="alarms-assets" value="" data-imei="' + item.IMEI + '" data-id="' + item.Id + '">';
+            ret +=          '<div class="item-media">'+assetImg+'</div>';
+            ret +=          '<div class="item-inner">';
+            ret +=              '<div class="item-title-row">';
+            ret +=                  '<div class="item-title ">' + item.Name + '</div>';
+            ret +=                  '<div class="item-after">';
+            ret +=                      '<i class="icon icon-form-checkbox"></i>';
+            ret +=                  '</div>';
+            ret +=              '</div>';
+            ret +=          '</div>';
+            ret +=      '</label>';
+            ret +=  '</li>';*/
 
             return ret;
         }
@@ -1281,6 +1307,7 @@ App.onPageInit('alarms.assets', function(page) {
 
 App.onPageInit('alarms.select', function(page) {
 
+    $(page.container).find('input[type="radio"]').checkRadioTweak();
 
     $$('.saveAlarm').on('click', function(e) {
         var alarmOptions = {
@@ -1708,6 +1735,8 @@ App.onPageInit('resetPwd', function(page) {
 
 App.onPageInit('asset.alarm', function(page) {
 
+    $(page.container).find('input[type="radio"]').checkRadioTweak();
+
     $$('.saveAlarm').on('click', function(e) {
         var alarmOptions = {
             IMEI: TargetAsset.ASSET_IMEI,
@@ -1761,7 +1790,7 @@ App.onPageInit('asset.playback', function(page) {
             '<div class="toolbar-inner">' +
             '<div class="left"><div class="text">' + LANGUAGE.ASSET_PLAYBACK_MSG04 + '</div></div>' +
             '<div class="right">' +
-            '<a href="#" class="link close-picker color-black">{{closeText}}</a>' +
+            '<a href="#" class="link close-picker color-white">{{closeText}}</a>' +
             '</div>' +
             '</div>' +
             '</div>',
@@ -1818,7 +1847,7 @@ App.onPageInit('asset.playback', function(page) {
             '<div class="toolbar-inner">' +
             '<div class="left"><div class="text">' + LANGUAGE.ASSET_PLAYBACK_MSG05 + '</div></div>' +
             '<div class="right">' +
-            '<a href="#" class="link close-picker color-black">{{closeText}}</a>' +
+            '<a href="#" class="link close-picker color-white">{{closeText}}</a>' +
             '</div>' +
             '</div>' +
             '</div>',
@@ -1868,7 +1897,7 @@ App.onPageInit('asset.playback', function(page) {
             '<div class="toolbar-inner">' +
             '<div class="left"><div class="text">' + LANGUAGE.ASSET_PLAYBACK_MSG06 + '</div></div>' +
             '<div class="right">' +
-            '<a href="#" class="link close-picker color-black">{{closeText}}</a>' +
+            '<a href="#" class="link close-picker color-white">{{closeText}}</a>' +
             '</div>' +
             '</div>' +
             '</div>',
@@ -1924,7 +1953,7 @@ App.onPageInit('asset.playback', function(page) {
             '<div class="toolbar-inner">' +
             '<div class="left"><div class="text">' + LANGUAGE.ASSET_PLAYBACK_MSG07 + '</div></div>' +
             '<div class="right">' +
-            '<a href="#" class="link close-picker color-black">{{closeText}}</a>' +
+            '<a href="#" class="link close-picker color-white">{{closeText}}</a>' +
             '</div>' +
             '</div>' +
             '</div>',
@@ -2035,6 +2064,7 @@ App.onPageInit('asset.location', function(page) {
 });
 
 App.onPageInit('asset.track', function(page) {
+    $(page.container).find('input[name="Geofence"]').checkRadioTweak();
     showMap();
 
     var posTime = $$(page.container).find('.position_time');
@@ -2091,8 +2121,17 @@ App.onPageInit('asset.track', function(page) {
             window.PosMarker[TargetAsset.ASSET_IMEI+'-geofence'] = false;
         }
     });*/
-
+    var geofenceTitles = $$(page.container).find('.geofenceSetList .item-title');
     var geofence = $$(page.container).find('input[name="Geofence"]');
+
+
+    geofenceTitles.on('click touch', function() {
+        var radio = $$(this).siblings('.check-radio-tweak-wrapper');
+        if (radio.length) {
+            radio.click();
+        }
+    });
+
     geofence.on('change', function() {
         var latlng = window.PosMarker[TargetAsset.ASSET_IMEI].getLatLng();
         changeAssetGeoFenceSate({
@@ -2124,8 +2163,6 @@ App.onPageBeforeRemove('asset.track', function(page) {
     clearInterval(trackTimer);
     trackTimer = false;
 });
-
-
 
 App.onPageInit('asset.playback.show', function(page) {
     var rangeInput = $$(page.container).find('input[name="rangeInput"]');
@@ -3011,6 +3048,7 @@ function loadStatusPage() {
             assetStats.temperature = assetFeaturesStatus.temperature.value;
         }
         if (assetFeaturesStatus.stopped) {
+            //console.log(assetFeaturesStatus.stopped);
             assetStats.stoppedDuration = assetFeaturesStatus.stopped.duration;
         }
         /*if (assetFeaturesStatus.geolock) {
@@ -3250,10 +3288,6 @@ function loadAlarmPage() {
             state: true,
             val: 4,
         },
-        // bilge: {
-        //     state: true,
-        //     val: 131072,
-        // },
         speeding: {
             state: true,
             val: 32,
@@ -3262,27 +3296,31 @@ function loadAlarmPage() {
             state: true,
             val: 256,
         },
-
-        input1Low: {
-            state: true,
-            val: 524288,
-        },
-
+        // bilge: {
+        //     state: true,
+        //     val: 131072,
+        // },
+        // input1Low: {
+        //     state: true,
+        //     val: 524288,
+        // },
         /*geofenceIn: {
             state: true,
             val: 8,
         },*/
 
-
         /*geofenceOut: {
             state: true,
             val: 16,
         },  */
-
-        alarm: {
-            state: true,
-            //val: 0,
-        },
+        // power: {
+        //     state: true,
+        //     val: 4,
+        // },        
+        // alarm: {
+        //     state: true,
+        //     //val: 0,
+        // },
     };
 
 
@@ -3302,7 +3340,6 @@ function loadAlarmPage() {
         url: 'resources/templates/asset.alarm.html',
         context: {
             Name: POSINFOASSETLIST[TargetAsset.ASSET_IMEI].Name,
-            //alarm: alarms.alarm.state,
             geolock: alarms.geolock.state,
             harshAcc: alarms.harshAcc.state,
             harshBrk: alarms.harshBrk.state,
@@ -3310,14 +3347,11 @@ function loadAlarmPage() {
             accOn: alarms.accOn.state,
             lowBattery: alarms.lowBattery.state,
             mainBatteryFail: alarms.mainBatteryFail.state,
-            // bilge: alarms.bilge.state,
             speeding: alarms.speeding.state,
             tilt: alarms.tilt.state,
 
-            input1Low: alarms.input1Low.state,
-            //geofenceIn: alarms.geofenceIn.state,
-            //geofenceOut: alarms.geofenceOut.state,
-
+            // geolock: alarms.geolock.state,            
+            // power: alarms.power.state,            
         }
     });
 }
@@ -3753,7 +3787,6 @@ function loadTrackPage(params) {
 }*/
 
 function updateAssetData(parameters) {
-	console.log('updateAssetFunc');
     var userInfo = getUserinfo();
     //var url = API_URL.URL_GET_ALL_POSITIONS.format(userInfo.MinorToken); 
     var url = API_URL.URL_GET_POSITION.format(userInfo.MinorToken, TargetAsset.ASSET_ID);
@@ -3794,11 +3827,10 @@ function updateAssetData(parameters) {
 }
 
 function updateMarkerPositionTrack(data) {
-	
-	var page = App.getCurrentView().activePage;   
     var asset = POSINFOASSETLIST[TargetAsset.ASSET_IMEI];
+    var page = App.getCurrentView().activePage;
 
-    if (asset && page && page.name == "asset.track") {    	
+    if (asset && page && page.name == "asset.track") {
         window.PosMarker[TargetAsset.ASSET_IMEI].setLatLng([asset.posInfo.lat, asset.posInfo.lng]);
 
         var latlng = {};
@@ -4989,7 +5021,7 @@ function saveGeofence(url, params) {
             cache: false,
             crossDomain: true,
             success: function(result) {
-                //console.log(result);
+                console.log(result);
                 App.hidePreloader();
                 if (result.MajorCode == '000') {
                     //setGeoFenceList(result.Data);      
@@ -5078,7 +5110,6 @@ function showUserGuide() {
         window.open(href, '_blank');
     }
 }
-
 
 
 /* ASSET EDIT PHOTO */
