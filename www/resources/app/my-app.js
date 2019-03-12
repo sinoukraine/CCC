@@ -2125,6 +2125,8 @@ App.onPageBeforeRemove('asset.track', function(page) {
     trackTimer = false;
 });
 
+
+
 App.onPageInit('asset.playback.show', function(page) {
     var rangeInput = $$(page.container).find('input[name="rangeInput"]');
     var rangeInputSpeed = $$(page.container).find('input[name="rangeInputSpeed"]');
@@ -3244,14 +3246,14 @@ function loadAlarmPage() {
             state: true,
             val: 512,
         },
-        power: {
+        mainBatteryFail: {
             state: true,
             val: 4,
         },
-        bilge: {
-            state: true,
-            val: 131072,
-        },
+        // bilge: {
+        //     state: true,
+        //     val: 131072,
+        // },
         speeding: {
             state: true,
             val: 32,
@@ -3307,8 +3309,8 @@ function loadAlarmPage() {
             accOff: alarms.accOff.state,
             accOn: alarms.accOn.state,
             lowBattery: alarms.lowBattery.state,
-            power: alarms.power.state,
-            bilge: alarms.bilge.state,
+            mainBatteryFail: alarms.mainBatteryFail.state,
+            // bilge: alarms.bilge.state,
             speeding: alarms.speeding.state,
             tilt: alarms.tilt.state,
 
@@ -3751,6 +3753,7 @@ function loadTrackPage(params) {
 }*/
 
 function updateAssetData(parameters) {
+	console.log('updateAssetFunc');
     var userInfo = getUserinfo();
     //var url = API_URL.URL_GET_ALL_POSITIONS.format(userInfo.MinorToken); 
     var url = API_URL.URL_GET_POSITION.format(userInfo.MinorToken, TargetAsset.ASSET_ID);
@@ -3791,9 +3794,11 @@ function updateAssetData(parameters) {
 }
 
 function updateMarkerPositionTrack(data) {
+	
+	var page = App.getCurrentView().activePage;   
     var asset = POSINFOASSETLIST[TargetAsset.ASSET_IMEI];
 
-    if (asset) {
+    if (asset && page && page.name == "asset.track") {    	
         window.PosMarker[TargetAsset.ASSET_IMEI].setLatLng([asset.posInfo.lat, asset.posInfo.lng]);
 
         var latlng = {};
