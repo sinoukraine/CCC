@@ -269,6 +269,19 @@ Protocol = {
             return ret;
            
         },
+        getAlertNameByType: function(type){
+            var ret = "";
+            type ? type = parseInt(type,10) : '';
+            switch (type){ 
+                case 8:
+                    ret = LANGUAGE.ALARM_MSG12;    //InGeoFance
+                    break;
+                case 16:
+                    ret = LANGUAGE.ALARM_MSG13;     //OutGeoFance
+                    break;                    
+            }
+            return ret;  
+        },
         getDifferenceBTtwoDates: function(date1, date2){
             var ret = "";
             if (date1 && date2) {
@@ -422,7 +435,7 @@ Protocol = {
 
             
 
-            var map = L.map(option.target, { zoomControl: false, center: option.latLng, zoom: option.zoom, layers: [googleSatelitte, layerSeaMark, layerGrid2] }); 
+            var map = L.map(option.target, { zoomControl: false, center: option.latLng, zoom: option.zoom, layers: [googleSatelitte, layerGrid2] }); 
                         
             var layers = {
                 "<span class='mapSwitcherWrapper googleSwitcherWrapper'><img class='layer-icon' src='resources/images/googleRoad.png' alt='' /> <p>Map</p></span>": googleStreets,
@@ -431,7 +444,7 @@ Protocol = {
             };
            
             var mapOverlays = {
-                'SeaMarks': layerSeaMark,
+                /*'SeaMarks': layerSeaMark,*/
                 'Grid': layerGrid2,               	  	
 			};
             L.control.layers(layers, mapOverlays).addTo(map);         
@@ -782,7 +795,14 @@ Protocol.Common = JClass({
         this._FIELD_FLOAT7 = arg._FIELD_FLOAT7;
         this.AlarmOptions = arg.AlarmOptions;
         this._FIELD_FLOAT8 = arg._FIELD_FLOAT8;
-        this.StatusNew = arg.StatusNew;       
+        this.StatusNew = arg.StatusNew;  
+        this._FIELD_INT2 = arg._FIELD_INT2;
+        this.GroupCode = arg.GroupCode;   
+        this.SolutionType = arg.SolutionType;
+        this.Registration = arg.Registration;
+        this.StockNumber = arg.StockNumber;
+        this.MaxSpeed = arg.MaxSpeed;
+        this.MaxSpeedAlertMode = arg.MaxSpeedAlertMode;     
     
     },
     initDeviceInfoEx:function(){},

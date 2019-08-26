@@ -158,3 +158,9 @@
 .icon-hint:before {
   content: "\4e";
 }
+.icon-other-menu-geofence:before {
+  content: "\4f";
+}
+.icon-other-menu:before {
+  content: "\50";
+}
